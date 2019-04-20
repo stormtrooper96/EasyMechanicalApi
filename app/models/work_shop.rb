@@ -1,0 +1,3 @@
+class WorkShop < ApplicationRecord
+
+end
