@@ -1,4 +1,3 @@
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_20_170916) do
+ActiveRecord::Schema.define(version: 2019_04_21_151704) do
 
   create_table "booking_statuses", force: :cascade do |t|
     t.string "name"
@@ -32,6 +31,8 @@ ActiveRecord::Schema.define(version: 2019_04_20_170916) do
     t.integer "operator_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "direccion"
+    t.string "descripcion"
     t.index ["booking_status_id"], name: "index_bookings_on_booking_status_id"
     t.index ["operator_id"], name: "index_bookings_on_operator_id"
     t.index ["service_id"], name: "index_bookings_on_service_id"
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 2019_04_20_170916) do
     t.integer "service_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "phone"
     t.index ["service_id"], name: "index_operators_on_service_id"
     t.index ["status_id"], name: "index_operators_on_status_id"
     t.index ["workshop_id"], name: "index_operators_on_workshop_id"
