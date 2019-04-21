@@ -5,9 +5,10 @@
 #   gem 'sqlite3'
 #
 default: &default
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  adapter: postgresql
+  pool: 5
   timeout: 5000
+  encoding: unicode
 
 development:
   <<: *default
@@ -20,6 +21,10 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+
 production:
   <<: *default
-  database: db/production.sqlite3
+  host: localhost
+  database: alpha_database
+  username: infox17
+  password: infox17
