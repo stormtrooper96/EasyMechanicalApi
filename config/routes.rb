@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   resources :operators
   post 'auth/operator', to: 'authentication#authenticateOperator'
   post 'signupOperator', to: 'operators#create'
+  post 'activeBookings', to: 'bookings#showRidesByRating'
+  
   resources :booking_statuses 
   resources :statuses 
   resources :services

@@ -1,30 +1,69 @@
 class BookingsController < Applicationcontroller2Controller
-	skip_before_action :authorize_request_operator, only: [:create,:update]
+  skip_before_action :authorize_request_operator, only: [:create,:update]
   def index #controlado por el GET
       @bookings = Booking.all
       render json: @bookings, status: :ok
   end
+
   def show
     @booking = Booking.find(params[:id])
     json_response({"Booking": @booking})
   end
 
   def create
-	    item = Booking.create!(booking_params)
-	    render json: item, status: :ok
+      item = Booking.create!(booking_params)
+      render json: item, status: :ok
   end
   def update
-  	bookingu = Booking.find(params[:id])
-  	Booking.update(booking_params)
-  	response={message: Message.update_customer,id: bookingu}
-  	render json: response, status: :ok
+    bookingu = Booking.find(params[:id])
+    Booking.update(booking_params)
+    response={message: Message.update_customer,id: bookingu}
+    render json: response, status: :ok
 
   end
+  
+#si este usuario envia la peticion consulte el rating
+#si el usuario tiene 4.5 muestrele todas las carreras
+#y ahora si la carrera esta en .10 y 2 minutos entonces muestrela  a los que tienen 4
+#y ahora si la carrera esta en > 2 minutos entonces muestrela  a los que tienen 3.5
+
+
+
+def showRidesByRating
+
+    @operator = Operator.find(showBookingsAllow[:id])
+    bookingsactive = []
+
+    Booking.all.each do |booking|
+       
+     diff =(( Time.now()  - created) * 24 * 60).to_i 
+
+     if diff >2 and booking.booking_status_id==0
+       booking.booking_status_id=3 
+
+     elsif @operator.rate>=4.5 and booking.booking_status_id==0
+       bookingsactive << booking
+   
+     elsif @operator.rate>=4.5 and booking.booking_status_id==0
+       bookingsactive << booking
+    
+     elsif @operator.rate<4.5 and  @operator.rate>4.0 and diff<1 and diff >0.10  and booking.booking_status_id==0
+           bookingsactive << booking 
+
+   
+     elsif @operator.rate<4.0 and  @operator.rate>3.5 and diff>=1 and diff <2 and booking.booking_status_id==0
+       bookingsactive << booking
+     
+     end
+     render json: bookingsactive, status: :ok
+    end
+end
+
   private
 
   def booking_params
-    params.permit(	
-   	  :accepted_at,
+    params.permit(  
+      :accepted_at,
       :cancelled_at,
       :finish_at,
       :rate,
@@ -33,9 +72,16 @@ class BookingsController < Applicationcontroller2Controller
       :service_id,
       :user_id,
       :operator_id
-      	
+        
 
     )
-  end	
+ private
+  def showBookingsAllow
+    params.permit(  
+      :id
+        
+
+    )
+  end 
 
 end
