@@ -23,41 +23,35 @@ class BookingsController < Applicationcontroller2Controller
 
   end
 
-#si este usuario envia la peticion consulte el rating
-#si el usuario tiene 4.5 muestrele todas las carreras
-#y ahora si la carrera esta en .10 y 2 minutos entonces muestrela  a los que tienen 4
-#y ahora si la carrera esta en > 2 minutos entonces muestrela  a los que tienen 3.5
 
 
 
-def showRidesByRating
-
+  def showRidesByRating
     @operator = Operator.find(showBookingsAllow[:id])
     bookingsactive = []
+    diff2=0
 
     Booking.all.each do |booking|
        
-     diff =(( Time.now()  - created) * 24 * 60).to_i 
+     diff =(Time.current()  - booking.created_at) / 60
 
-     if diff >2 and booking.booking_status_id==0
+     if diff >=2 and booking.booking_status_id==0
        booking.booking_status_id=3 
-
-     elsif @operator.rate>=4.5 and booking.booking_status_id==0
-       bookingsactive << booking
    
      elsif @operator.rate>=4.5 and booking.booking_status_id==0
-       bookingsactive << booking
+       bookingsactive.push(booking)
     
      elsif @operator.rate<4.5 and  @operator.rate>4.0 and diff<1 and diff >0.10  and booking.booking_status_id==0
-           bookingsactive << booking 
-
+           bookingsactive.push(booking)
    
      elsif @operator.rate<4.0 and  @operator.rate>3.5 and diff>=1 and diff <2 and booking.booking_status_id==0
-       bookingsactive << booking
+      bookingsactive.push(booking)
      
      end
-     render json: bookingsactive, status: :ok
+     diff2=diff
+      
     end
+    render :json => bookingsactive, status: :ok
   end
 
   private
@@ -76,12 +70,10 @@ def showRidesByRating
         
 
     )
- private
+  end  
   def showBookingsAllow
     params.permit(  
       :id
-        
-
     )
   end 
 
