@@ -14,6 +14,7 @@ class BookingsController < Applicationcontroller2Controller
       item = Booking.create!(booking_params)
       render json: item, status: :ok
   end
+
   def update
     bookingu = Booking.find(params[:id])
     Booking.update(booking_params)
@@ -21,7 +22,7 @@ class BookingsController < Applicationcontroller2Controller
     render json: response, status: :ok
 
   end
-  
+
 #si este usuario envia la peticion consulte el rating
 #si el usuario tiene 4.5 muestrele todas las carreras
 #y ahora si la carrera esta en .10 y 2 minutos entonces muestrela  a los que tienen 4
@@ -57,7 +58,7 @@ def showRidesByRating
      end
      render json: bookingsactive, status: :ok
     end
-end
+  end
 
   private
 
